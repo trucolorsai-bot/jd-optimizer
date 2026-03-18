@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JD Optimizer | True Belonging LLC</title>
+    <!-- Modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4338ca;
+            --primary-hover: #3730a3;
+            --bg: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: var(--surface);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        main {
+            flex: 1;
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 0 1.5rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .hero-text {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .hero-text p {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            padding: 2rem;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.1);
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.875rem 2rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results {
+            margin-top: 2rem;
+            display: none;
+        }
+
+        .score-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+
+        .score-good { background: #d1fae5; color: #065f46; }
+        .score-warn { background: #fef3c7; color: #92400e; }
+        .score-bad  { background: #fee2e2; color: #991b1b; }
+
+        .paywall-container {
+            position: relative;
+            margin-top: 1.5rem;
+        }
+
+        .rewritten-text {
+            filter: blur(5px);
+            user-select: none;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin: 0;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .paywall-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+
+        .pay-btn {
+            background-color: #10b981;
+            width: auto;
+            margin-top: 0;
+            padding: 0.75rem 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+        }
+
+        .pay-btn:hover {
+            background-color: #059669;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-light);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>JD Optimizer</h1>
+    </header>
+
+    <main>
+        <div class="hero-text">
+            <h2>Remove Unconscious Bias from Your Job Listings</h2>
+            <p>Paste your job description below to scan for exclusionary language and aggressively corporate jargon. Get an instant inclusion score.</p>
+        </div>
+
+        <div class="card">
+            <form id="jd-form">
+                <textarea 
+                    id="jd-input" 
+                    placeholder="Paste job description here... (e.g. We are looking for an aggressive rockstar ninja who can work hard...)" 
+                    required></textarea>
+                <button type="submit" id="submit-btn">Check Bias Score & Optimize</button>
+            </form>
+            
+            <div class="loader" id="loader">Processing language algorithms...</div>
+
+            <div class="results" id="results">
+                <div id="score-box" class="score-container">
+                    <span>Inclusion Score</span>
+                    <span id="score-value">--/100</span>
+                </div>
+
+                <h3>Optimized & Rewritten Text</h3>
+                <p style="font-size: 0.9rem; color: var(--text-light); margin-bottom: 0.5rem;">
+                    We've rewritten your JD to maximize diverse applicant conversion. Unlock the text below to copy it.
+                </p>
+
+                <div class="paywall-container">
+                    <!-- The generated text will be pasted here, but blurred by default -->
+                    <div class="rewritten-text" id="rewritten-text">
+                        Loading rewritten text. This will be replaced with the actual text.
+                    </div>
+                    
+                    <div class="paywall-overlay" id="paywall-overlay">
+                        <h4 style="margin: 0 0 1rem; color: var(--text-main);">Unlock the completely rewritten JD</h4>
+                        <button class="pay-btn" onclick="alert('Stripe/Coinbase checkout initiated. (Mock paywall)')">Pay $1.00 to Unlock Text</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('jd-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submit-btn');
+            const loader = document.getElementById('loader');
+            const results = document.getElementById('results');
+            const jdText = document.getElementById('jd-input').value;
+
+            btn.disabled = true;
+            loader.style.display = 'block';
+            results.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/optimize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ job_description: jdText })
+                });
+
+                if (!res.ok) throw new Error('Failed to analyze');
+
+                const data = await res.json();
+                
+                // Set score
+                const scoreBox = document.getElementById('score-box');
+                const scoreVal = document.getElementById('score-value');
+                scoreVal.textContent = `${data.score} / 100`;
+                
+                scoreBox.className = 'score-container';
+                if (data.score >= 80) scoreBox.classList.add('score-good');
+                else if (data.score >= 50) scoreBox.classList.add('score-warn');
+                else scoreBox.classList.add('score-bad');
+
+                // Set rewritten text
+                document.getElementById('rewritten-text').textContent = data.rewritten;
+
+                results.style.display = 'block';
+            } catch (err) {
+                alert("Error connecting to optimization server.");
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
